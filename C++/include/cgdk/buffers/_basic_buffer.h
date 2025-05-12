@@ -230,7 +230,7 @@ public:
 	constexpr self_t			operator+=(CGDK::size _rhs)
 			{
 				// check) upper bound
-				_CGD_BUFFER_BOUND_CHECK( _rhs.amount <= static_cast<int64_t>(this->_get_upper_distance_from_end()));
+				_CGD_BUFFER_BOUND_CHECK( _rhs.amount <= this->_get_upper_distance_from_end());
 
 				// - add
 				this->size_ += _rhs.amount;
@@ -821,7 +821,10 @@ public:
 		_CGD_BUFFER_BOUND_CHECK((p + 1) <= this->get_upper_bound());
 
 		// 2) [원본_버퍼_끝_포인터]에 값(_data)를 써넣는다.
-		*p = _data;
+	#pragma push_macro("new")
+	#undef new
+		new (p) T(_data);
+	#pragma pop_macro("new")
 	
 		// 3) [원본_버퍼_길이]를 sizeof(T)만큼 늘린다. 
 		this->size_ += sizeof(T);
